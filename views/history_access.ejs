@@ -1,0 +1,56 @@
+<%- include('includes/head.ejs') %>
+  <style>
+    /* CSS để tạo giao diện đẹp cho danh sách */
+    .container {
+      max-width: 2000 px;
+      margin: 0 auto;
+    }
+    
+    .frame-list {
+      list-style: none;
+      padding: 0;
+      border: 1px solid #3498db;
+      border-radius: 10px;
+      background-color: #f1f1f1;
+    }
+    
+    .frame-list-item {
+      padding: 10px;
+      border-bottom: 1px solid #3498db;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #fff;
+      color: #3498db;
+    }
+    
+    .frame-list-item:last-child {
+      border-bottom: none;
+    }
+    
+    .frame-list-item span {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+    <%- include('includes/navigation.ejs') %>
+    <main>
+    <% if (access.length > 0) { %>
+    <div class="container">
+      <ul class="frame-list">
+        <% access.forEach(access => { %>
+        <li class="frame-list-item">
+          <span style="color: #e74c3c; padding: 15px;">Name: <%= access.name %></span>
+          <span style="color: #e67e22;padding: 15px;">Email: <%= access.email %></span>
+          <span style="color: #27ae60;padding: 15px;">Time: <%= access.createdAt %></span>
+        </li>
+        <% }); %>
+        <!-- Thêm các mục khác tương tự -->
+      </ul>
+    </div>
+    <% } else { %>
+      <h1>No access yet!</h1>
+    <% } %>
+    <script src="/public/app.js"></script>
+<%- include('includes/end.ejs') %>

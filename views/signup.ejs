@@ -1,0 +1,41 @@
+<%- include('includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+
+<body>
+  <%- include('includes/navigation.ejs') %>
+
+    <main>
+        <div style="background-color: white;
+        border-radius: 10px;
+        margin-top: 20px;
+        padding: 50px;
+        "> 
+            <form class="login-form" action="/signup" method="POST">
+                <h2 style="margin-left: 83px;font-weight: bold;" >SIGN UP</h2>
+                <% if (errMessage != "") { %>
+                    <div class="user-message user-message--error"><%= errMessage %></div>
+                <% } %>
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <div class="form-control" style="padding: 5px 10px;">
+                    <label for="name">Name</label>
+                    <input type="name" style="padding: 5px;" name="name" id="name">
+                </div>
+                <div class="form-control" style="padding: 5px 10px;">
+                    <label for="email">E-Mail</label>
+                    <input type="email" style="padding: 5px;" name="email" id="email">
+                </div>
+                <div class="form-control" style="padding: 5px 10px;">
+                    <label for="password">Password</label>
+                    <input style="padding: 10px;" type="password" name="password" id="password">
+                </div>
+                <div class="form-control" style="padding: 5px 10px;">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input style="padding: 5px;" type="password" name="confirmPassword" id="confirmPassword">
+                </div>
+                <button type="submit" class="btn btn-success" style="margin-left: 110px;">Sign up</button>
+            </form>
+        </div>
+    </main>
+<%- include('includes/end.ejs') %>

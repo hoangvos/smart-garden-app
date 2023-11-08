@@ -1,0 +1,152 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose')
+const path = require('path');
+const mainroute = require('./routes/main.js');
+const authroute = require('./routes/auth.js');
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
+
+const csrf = require('csurf')
+const flash = require('connect-flash')
+
+const errorController = require('./controllers/error');
+
+const User = require('./firebase/config.js');
+const app = express();
+const sensors = require('./models/sensors.js');
+const hist_door = require('./models/door.js')
+const schedule_time = require('./models/time-schedule.js')
+
+const MONGODB_URI = 'mongodb+srv://hoang:hoang0965766364@cluster0.ambcnxe.mongodb.net/session-store?retryWrites=true&w=majority&appName=AtlasApp'
+
+const store = new MongoDBStore({
+  uri: MONGODB_URI,
+  collection: 'sessions',
+});
+
+const csrfProtection = csrf();
+app.use(flash())
+
+// Sử dụng EJS làm view engine
+app.set('view engine', 'ejs');
+app.set('views', 'views')
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json())
+app.use(session({secret: 'my secret', resave: false, saveUninitialized: false, store: store}))
+// Route để hiển thị nhiệt độ và độ ẩm
+app.use(csrfProtection)
+app.use(mainroute);
+app.use(authroute)
+
+app.use(errorController.get404);
+
+
+mongoose.connect(MONGODB_URI).then(result=>{  
+  const server = app.listen(3000, () => {
+  console.log(`Server is running on port 3000`);
+  const io = require('socket.io')(server);
+  setInterval(
+    async ()=>{
+      await schedule_time.find().then(
+        async (result)=>{
+          for (items of  result){
+            const currentDate = new Date();
+            const currentHour = currentDate.getHours();
+            const currentMinute = currentDate.getMinutes();
+            if(items['hour'] == currentHour && items['minute'] ==currentMinute){
+              User.update({
+                'Pump': true
+              })
+            }
+            const hour_end = (items['hour'] + Math.floor((items['minute'] + items['intervals'])/60))%24 
+            const minute_end = (items['minute'] + items['intervals'])%60
+            if(hour_end == currentHour && minute_end ==currentMinute){
+              User.update({
+                'Pump': false
+              })
+            }
+          }
+        }
+      )
+    },
+    2000
+  )
+  //Lắng nghe sự kiện thay đổi trong Firebase
+  User.onSnapshot(async(snapshot) => {
+    snapshot = await User.get()
+    var data = snapshot.data()  
+    console.log(data)
+    if (data) {
+      const temperature = data["Temperature"];
+      const humidity = data["Humidity"];
+      const door = data["Door"]
+      const pump = data["Pump"]
+      const brightness = data["Brightness"]
+      const Sensors = new sensors({
+        temperature:temperature,
+        humidity:humidity,
+        brightness_level:brightness
+      })
+      return Sensors.save().then(async result=>{
+        const last_access_door = await hist_door.find().sort({createdAt:-1}).limit(1)
+        if(!last_access_door) {
+          const access_door = new hist_door({
+            state: door,
+            message: door ? "The door is opened" : "The door is closed" 
+          })
+          return access_door.save().then(
+            result=>{
+              try {
+                io.emit('data-update', { temperature, humidity, door, pump, brightness});
+              } catch (error) {
+                console.log(error)
+              }
+            }
+          )
+        }
+        else{
+          if(last_access_door[0]['state'] != door){
+            console.log(last_access_door)
+            const access_door = new hist_door({
+              state: door,
+              message: door ? "The door is opened" : "The door is closed" 
+            })
+            return access_door.save().then(
+              result=>{
+                try {
+                  io.emit('data-update', { temperature, humidity, door, pump, brightness});
+                } catch (error) {
+                  console.log(error)
+                }
+              }
+            )
+          }else{
+            try {
+              io.emit('data-update', { temperature, humidity, door, pump, brightness});
+            } catch (error) {
+              console.log(error)
+            }
+          }
+        }
+      })
+      // Cập nhật trang web với dữ liệu mới
+
+    }
+  });
+
+  io.on('connection', socket => {
+    console.log('A user connected');
+    // Lắng nghe sự kiện khi dữ liệu cần được cập nhật
+    socket.on('get-latest-data', () => {
+      // Truyền dữ liệu mới tới trình duyệt khi cần
+      io.emit('data-update', { temperature, humidity, door, pump, brightness});
+    });
+  });
+  });
+}).catch(err=>{
+  console.log(err)
+})
+
