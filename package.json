@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
+    "start": "nodemon app.js",
     "start-server": "node app.js"
   },
   "author": "Hoang",
@@ -27,7 +27,7 @@
     "express-session": "^1.17.3",
     "firebase": "^8.10.0",
     "firebase-admin": "^11.11.0",
-    "mongoose": "^7.6.1",
+    "mongoose": "^7.6.4",
     "mysql2": "^1.6.1",
     "pug": "^2.0.3",
     "sequelize": "^5.0.0-beta.11",
