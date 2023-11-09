@@ -2,6 +2,14 @@
     <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
+    <style>
+        @media (max-width: 40em) {
+            .data{
+                display: block;
+                justify-items: center;
+            }
+        }
+    </style>
     <%- include('includes/navigation.ejs') %>
 
     <div class="container">
@@ -10,37 +18,51 @@
         </header>
         <% if (isAuthenticated) { %>
             <div class="data">
-                <div class="data-item" id='div-temp' onclick="applyClickEffect_temp();window.location='/chart-temperature';" style="display: flex;
+                <div class="data-item" id='div-temp' onclick="applyClickEffect_temp();window.location='/chart-temperature';" style="display: flex;width: 100%;  ;
                 transition: all 0.3s;"
                 onmouseover="this.style.backgroundColor='rgb(234, 127, 127)'; this.style.border='1px solid green';" onmouseout="this.style.backgroundColor='#f0f0f0'; this.style.border='1px solid transparent';" 
                 ;>
-                    <div class="icon-big icon-danger text-center" style="width: 200px; height: 150px;justify-content: center; align-items: center;">
+                    <div class="icon-big icon-danger text-center" style="width: 100%; height: 150px;justify-content: center; align-items: center;">
                         <i class="fas fa-temperature-high" style="font-size: 125px; padding-top: 10px; color: rgb(194, 56, 56);"></i>
                     </div>
-                    <div>
+                    
+                    <div style="width: 100%">
                     <p class="data-label" style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; justify-content: center; align-items: center; padding-top: 25px;">Temperature</p>
                     <p class="data-value" style="padding-top: 10px;"><span id="temperature" style="padding-top: 40px;"><%= temperature %>°C</span></p>
                     </div>
                 </div>
 
-                <div class="data-item" id='div-hum' onclick="applyClickEffect_hum();window.location='/chart-humidity';" style="display: flex;
+                <div class="data-item" id='div-hum' onclick="applyClickEffect_hum();window.location='/chart-humidity';" style="display: flex;width: 100%; ;
                 transition: all 0.3s;"
                 onmouseover="this.style.backgroundColor='rgb(9, 114, 140)'; this.style.border='1px solid green';" onmouseout="this.style.backgroundColor='#f0f0f0'; this.style.border='1px solid transparent';">
 
-                    <div class="icon-big icon-info text-center" style="width: 200px; height: 150px;justify-content: center; align-items: center;">
+                    <div class="icon-big icon-info text-center" style="width: 100%; height: 150px;justify-content: center; align-items: center;">
                         <i class="fas fa-tint" style="font-size: 125px; padding-top: 10px; color: rgb(0, 204, 255)"></i>
                     </div>
-                    <div>
+                    <div style="width: 100%">
                         <p class="data-label" style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; justify-content: center; align-items: center; padding-top: 25px;">Humidity</p>
                         <p class="data-value" style="padding-top: 10px;"><span id="humidity" style="padding-top: 40px;"><%= humidity %>%</span></p>
                     </div>
                 </div>
             </div>
-            <div class="data" style="display: flex;">
-                <div class="data-item">
+            <div class="data">
+                <div class="data-item" onclick="applyClickEffect_temp();window.location='/chart-brightness';" style="display: flex;width: 100%;
+                transition: all 0.3s;
+                "
+                onmouseover="this.style.backgroundColor='rgb(211, 227, 109)'; this.style.border='1px solid green';" onmouseout="this.style.backgroundColor='#f0f0f0'; this.style.border='1px solid transparent';" 
+                ;>
+                    <div class="icon-big icon-danger text-center" style="width: 100%; height: 150px;justify-content: center; align-items: center;">
+                        <i class="fas fa-lightbulb" style="font-size: 125px; padding-top: 10px; color: rgb(224, 248, 7);"></i>
+                    </div>
+                    <div style="width: 100%">
+                    <p class="data-label" style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; justify-content: center; align-items: center; padding-top: 25px;">Brightness Level</p>
+                    <p class="data-value" style="padding-top: 10px;"><span id="brightness" style="padding-top: 40px;"><%= brightness %> Lux</span></p>
+                    </div>
+                </div>  
+                <div class="data-item" style="width: 100%; padding: 30px;">
                     <div class="data-item"
-                     style="
-                    display: flex; width: 450px; height: 100px;">
+                     style="width: 100%;
+                    display: flex;  height: 100px;">
                         <div onclick="window.location='/history-door';"
                         style="display: flex; border-radius: 5px;
                         transition: all 0.3s;"
@@ -51,14 +73,14 @@
                         <div style="display: flex; justify-content:center; align-items: center; margin-left: 10px;">
                             <p style="font-size: 25px; font-weight: bold;">Door</p>
                         </div>
-                        <div style="margin-left: 130px; margin-top: 5px;">
-                            <label class="switch">
-                                <input type="checkbox" id="door-toggle" <%= door ? 'checked' : '' %>>
-                                <span id="door-toggle-id" class="slider round"> </span>
-                            </label>
-                        </div>
+
+                        <label class="switch" style="margin-left: auto;">
+                            <input type="checkbox" id="door-toggle" <%= door ? 'checked' : '' %>>
+                            <span id="door-toggle-id" class="slider round"> </span>
+                        </label>
+
                     </div>
-                    <div class="data-item" style="display: flex; width: 450px; height: 100px;">
+                    <div class="data-item" style="display: flex; width: 100%; ">
                         <div 
                         onclick="window.location='/pump-shedule';"
                         style="display: flex; border-radius: 5px;
@@ -72,29 +94,13 @@
                         <div style="display: flex; justify-content:center; align-items: center; margin-left: 40px;">
                             <p style="font-size: 25px; font-weight: bold;">Pump</p>
                         </div>
-                        <div style="margin-left: 120px; margin-top: 5px;"></div>
-                            <label class="switch">
-                                <input type="checkbox" id="pump-toggle" <%= pump ? 'checked' : '' %>>
-                                <span class="slider round"></span>
-                            </label>
-                        </div>
+                        <label class="switch" style="margin-left: auto;">
+                            <input type="checkbox" id="pump-toggle" <%= pump ? 'checked' : '' %>>
+                            <span class="slider round"></span>
+                        </label>
                     <div>
                 </div>
-
             </div>
-            <div class="data-item" onclick="applyClickEffect_temp();window.location='/chart-brightness';" style="display: flex;
-            transition: all 0.3s;
-            "
-            onmouseover="this.style.backgroundColor='rgb(211, 227, 109)'; this.style.border='1px solid green';" onmouseout="this.style.backgroundColor='#f0f0f0'; this.style.border='1px solid transparent';" 
-            ;>
-                <div class="icon-big icon-danger text-center" style="width: 200px; height: 150px;justify-content: center; align-items: center;">
-                    <i class="fas fa-lightbulb" style="font-size: 125px; padding-top: 10px; color: rgb(224, 248, 7);"></i>
-                </div>
-                <div>
-                <p class="data-label" style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; justify-content: center; align-items: center; padding-top: 25px;">Brightness Level</p>
-                <p class="data-value" style="padding-top: 10px;"><span id="brightness" style="padding-top: 40px;"><%= brightness %> Lux</span></p>
-                </div>
-            </div>  
         <% } else { %>
             <div class="welcome-item">
                 <p class="data-value">Welcome to your IOT garden webpage, please login to see details !!!</p>

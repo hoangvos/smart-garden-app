@@ -9,30 +9,27 @@
     }
   </style>
   <body >
-    <div class="container"  style="margin-left: 20px; width: 900px; height: 650px; "
-    >
+    <style>
+      @media (max-width: 40em) {
+          body {
+              display: block;
+              justify-items: center;
+          }
+      }
+    </style>
+    <div class="container" style="margin: 5px">
       <div class="card-header" style="  font-weight: bold; font-size: 20px; color: rgb(66, 188, 245) ;
-      margin-top: 70px; margin-bottom: 20px; font-size: 30px;
+      margin-top: 70px; margin-bottom: 20px; font-size: 30px;max-width: 100%; max-height: 100%;
       "> Humidity realtime chart </div>
-      <div class="Card-body" style="width: 750px; height: 200px;">
-        <div class="container" style="width: 750px; height: 200px; margin-bottom: 0px;
-        padding: 0px;
-        display: flex;
-        justify-items: center;
-        align-items: center;
-        ">
-          <canvas id="myChart" style="width: 700px; height: 300px;">
-  
+          <canvas id="myChart" style="max-width: 100%; max-height: 100%;">
           </canvas>
-        </div>
-        </div>
       </div>
     </div>
-    <div class="container" style="margin:10px">
+    <div class="container" style="margin:5px">
       <div class="card-header" style="  font-weight: bold; font-size: 20px; color: rgb(66, 188, 245) ;
       margin-top: 70px; margin-bottom: 20px; font-size: 30px;
       "> Humidity chart for 1 month </div>
-      <canvas id="myChart_x" style="width: 700px; height: 375px;">
+      <canvas id="myChart_x" style="max-width: 100%; max-height: 100%;">
   
       </canvas>
     </div>
