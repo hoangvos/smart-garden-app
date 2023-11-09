@@ -19,6 +19,7 @@
     }
     
     .frame-list-item {
+      max-width: 100%;
       padding: 10px;
       border-bottom: 1px solid #3498db;
       display: flex;
@@ -38,8 +39,8 @@
     .time-input-container {
       display: flex;
       align-items: center;
-      max-width: 500px;
-      max-height: 100px;
+      max-width: 100%;
+      max-height: 100%;
       border-style: solid;
       border-width: 4px;
       border-color: green;
@@ -114,30 +115,30 @@ align-items: center;
 
 
       <div style="
-      max-width: 100%;
+      max-width: 1000%;
       display: flex;
       justify-content: center;
       height: 300px;
       overflow: hidden; 
       overflow-y: scroll;
       ">
-        <ul class="frame-list" style="width: 800px;">
+        <ul class="frame-list" style="max-width: 100%;">
           <% schedules.forEach(schedules => { %>
-          <li class="frame-list-item">
-            <span style="color: gray;padding: 15px;">Hour: <%= schedules.hour  %></span>
-            <span style="color: gray;padding: 15px;">Minute: <%= schedules.minute  %></span>
-            <span style="color: #e74c3c; padding: 15px;">Intervals: <%= schedules.intervals %> minute(s)</span>
+          <li class="frame-list-item" >
+            <span style="color: gray;padding: 10px;">Hour: <%= schedules.hour  %></span>
+            <span style="color: gray;padding: 10px;">Minute: <%= schedules.minute  %></span>
+            <span style="color: #e74c3c; padding: 10px;">Intervals: <%= schedules.intervals %> minute(s)</span>
             <form class="login-form" action="/pump-shedule-delete" method="POST">
               <input type="hidden" name="_csrf" value="<%= csrfToken %>">
               <input type="hidden" name="id" value="<%= schedules._id %>">
-              <button type="submit" class="btn btn-danger" style="margin-left: 110px;">Delete</button>
+              <button type="submit" class="btn btn-danger" style="margin-left: 30px;">Delete</button>
             </form>
           </li>
           <% }); %>
         </ul>
       </div>
 
-      <div style="margin: 30px;font-weight: bold; font-size: 20px; color: green ;">
+      <div style="margin: 10px;font-weight: bold; font-size: 20px; color: green ; ">
         <div>
           <p>Register time to pump everyday</p>
         </div>
@@ -152,11 +153,11 @@ align-items: center;
         id="moblie"
         >  
           <form class="time-form" action="/pump-shedule" method="POST"
-          style="display: flex;  margin: 15px; gap: 2em;"
+          style="display: flex; gap: 2em;"
           >
             <div class="time-form-frame">
 
-              <div class="time-input-container" style="max-width: 100%; max-height: 100%;margin: 10px;" >
+              <div class="time-input-container" style="max-width: 100%; max-height: 100%;" >
                   <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                   <label class="input-label" for="time">Time:   
                   </label>
@@ -165,10 +166,10 @@ align-items: center;
               </div>
             
               <div class="time-input-container" style="padding: 10px;
-                max-width: 330px;margin: 10px;"
+                max-width: 100%;;"
                 >
                   <label for="Intervals">Intervals: </label>
-                  <input style="padding: 7px; width: 100px;
+                  <input style="padding: 7px; max-width: 100px;
                   margin-left: 20px;
                   border-width: 4px;
                   border-color: green;
@@ -177,7 +178,7 @@ align-items: center;
                   " type="text" name="intervals" id="intervals">
                   <label style="margin-left: 20px;" for="Intervals">minutes</label>
               </div>
-              <button type="submit" class="btn btn-success" id="moblie" style="max-height: 100%;margin: 10px;">Register</button>
+              <button type="submit" class="btn btn-success" id="moblie" style="max-height: 100%;">Register</button>
             </div>
           </form>
         </div>
