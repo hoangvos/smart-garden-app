@@ -2,7 +2,7 @@
   <style>
     /* CSS để tạo giao diện đẹp cho danh sách */
     .container {
-      max-width: 2000 px;
+      max-width: 100%;
       margin: 0 auto;
     }
     
@@ -31,19 +31,22 @@
     .frame-list-item span {
       font-weight: bold;
     }
+    .tmp{
+      font-size: clamp(10px, 1vw, 20px);
+    }
   </style>
 </head>
-<body>
+<body style="display: flex; justify-content: center;">
     <%- include('includes/navigation.ejs') %>
-    <main>
+    <main style="margin: 0px; padding: 0px; ">
     <% if (access.length > 0) { %>
-    <div class="container">
-      <ul class="frame-list">
+    <div class="container" style="max-width: 100%; margin-top: 20px;  margin-left: 0px; margin-right: 0px; padding: 0px;">
+      <ul class="frame-list" style="max-width: 100%;">
         <% access.forEach(access => { %>
-        <li class="frame-list-item">
-          <span style="color: #e74c3c; padding: 15px;">Name: <%= access.name %></span>
-          <span style="color: #e67e22;padding: 15px;">Email: <%= access.email %></span>
-          <span style="color: #27ae60;padding: 15px;">Time: <%= access.createdAt %></span>
+        <li class="frame-list-item" style="max-width: 100%;">
+          <span class="tmp" style="color: #e74c3c; ">Name: <%= access.name %></span>
+          <span class="tmp" style="color: #e67e22;">Email: <%= access.email %></span>
+          <span class="tmp" style="color: #27ae60;">Time: <%= access.createdAt %></span>
         </li>
         <% }); %>
         <!-- Thêm các mục khác tương tự -->

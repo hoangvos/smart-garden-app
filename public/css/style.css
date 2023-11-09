@@ -8,7 +8,6 @@ body {
   min-height: 85vh; 
   display: flex;
   background-color: lightgray;
-  padding: 10px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
@@ -34,22 +33,27 @@ body {
 }
 
 .data {
+  margin: 10px;
   display: flex;
   justify-content: space-between; /* Hiển thị nhiệt độ và độ ẩm ở hai bên */
   width: 100%;
-  padding: 20px 0;
+  gap: 25px;
+
 }
 
 .data-item {
   padding: 10px;
-  width: 48%; /* Adjust the size of each data item */
+  width: 100%; /* Adjust the size of each data item */
   background-color: #f0f0f0; /* Light gray background */
   border: 1px solid #ccc; /* Light gray border */
-  margin: 10px; /* Spacing between items */
+  margin: 0px 0px; /* Spacing between items */
   display: inline-block; /* Display items inline for a grid layout */
   box-sizing: border-box; /* Include padding and border in item size */
   text-align: center; /* Center align text */
   border-radius: 5px; /* Add rounded corners */
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
 }
 .data-label {
   font-size: 20px;

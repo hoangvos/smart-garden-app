@@ -11,9 +11,10 @@
         border-radius: 10px;
         margin-top: 20px;
         padding: 50px;
+        text-align: center;
         "> 
             <form class="login-form" action="/signup" method="POST">
-                <h2 style="margin-left: 83px;font-weight: bold;" >SIGN UP</h2>
+                <h2 style="font-weight: bold;" >SIGN UP</h2>
                 <% if (errMessage != "") { %>
                     <div class="user-message user-message--error"><%= errMessage %></div>
                 <% } %>
@@ -34,7 +35,7 @@
                     <label for="confirmPassword">Confirm Password</label>
                     <input style="padding: 5px;" type="password" name="confirmPassword" id="confirmPassword">
                 </div>
-                <button type="submit" class="btn btn-success" style="margin-left: 110px;">Sign up</button>
+                <button type="submit" class="btn btn-success">Sign up</button>
             </form>
         </div>
     </main>

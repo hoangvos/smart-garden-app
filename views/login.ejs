@@ -17,9 +17,10 @@ align-items: center;
       display: flex;
       justify-content: center;
       align-items: center;
+      text-align: center;
       ">  
         <form class="login-form" action="/login" method="POST">
-          <h2 style="margin-left: 94px;font-weight: bold;" >LOGIN</h2>
+          <h2 style="font-weight: bold;" >LOGIN</h2>
 
           <% if (errMessage != "") { %>
             <div class="user-message user-message--error"><%= errMessage %></div>
@@ -33,7 +34,7 @@ align-items: center;
               <label for="password">Password</label>
               <input style="padding: 7px;" type="password" name="password" id="password">
           </div>
-          <button type="submit" class="btn btn-success" style="margin-left: 110px;">Login</button>
+          <button type="submit" class="btn btn-success">Login</button>
         </form>
       </div>
 <%- include('includes/end.ejs') %>
