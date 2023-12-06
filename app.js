@@ -6,7 +6,7 @@ const mainroute = require('./routes/main.js');
 const authroute = require('./routes/auth.js');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
-
+const moment = require('moment-timezone').tz.setDefault('Asia/Ho_Chi_Minh')
 const csrf = require('csurf')
 const flash = require('connect-flash')
 
@@ -50,12 +50,13 @@ mongoose.connect(MONGODB_URI).then(result=>{
   const io = require('socket.io')(server);
   setInterval(
     async ()=>{
+      const currentDate = moment();
       await schedule_time.find().then(
         async (result)=>{
           for (items of  result){
-            const currentDate = new Date();
-            const currentHour = currentDate.getHours();
-            const currentMinute = currentDate.getMinutes();
+            const currentDate = moment();
+            const currentHour = currentDate.hour();
+            const currentMinute = currentDate.minute();
             if(items['hour'] == currentHour && items['minute'] ==currentMinute){
               User.update({
                 'Pump': true
@@ -83,16 +84,32 @@ mongoose.connect(MONGODB_URI).then(result=>{
       const temperature = data["Temperature"];
       const humidity = data["Humidity"];
       const door = data["Door"]
-      const pump = data["Pump"]
       const brightness = data["Brightness"]
+      const soil = data['Soil']
       const Sensors = new sensors({
         temperature:temperature,
         humidity:humidity,
         brightness_level:brightness
-      })
-      return Sensors.save().then(async result=>{
-        const last_access_door = await hist_door.find().sort({createdAt:-1}).limit(1)
-        if(!last_access_door) {
+      }) 
+      const last_access_door = await hist_door.find().sort({createdAt:-1}).limit(1)
+      if(!last_access_door) {
+        const access_door = new hist_door({
+          state: door,
+          message: door ? "The door is opened" : "The door is closed" 
+        })
+        return access_door.save().then(
+          result=>{
+            try {
+              io.emit('data-update', { temperature, humidity, brightness,soil});
+            } catch (error) {
+              console.log(error)
+            }
+          }
+        )
+      }
+      else{
+        if(last_access_door[0]['state'] != door){
+          console.log(last_access_door)
           const access_door = new hist_door({
             state: door,
             message: door ? "The door is opened" : "The door is closed" 
@@ -100,40 +117,21 @@ mongoose.connect(MONGODB_URI).then(result=>{
           return access_door.save().then(
             result=>{
               try {
-                io.emit('data-update', { temperature, humidity, door, pump, brightness});
+                io.emit('data-update', { temperature, humidity,  brightness,soil});
               } catch (error) {
                 console.log(error)
               }
             }
           )
-        }
-        else{
-          if(last_access_door[0]['state'] != door){
-            console.log(last_access_door)
-            const access_door = new hist_door({
-              state: door,
-              message: door ? "The door is opened" : "The door is closed" 
-            })
-            return access_door.save().then(
-              result=>{
-                try {
-                  io.emit('data-update', { temperature, humidity, door, pump, brightness});
-                } catch (error) {
-                  console.log(error)
-                }
-              }
-            )
-          }else{
-            try {
-              io.emit('data-update', { temperature, humidity, door, pump, brightness});
-            } catch (error) {
-              console.log(error)
-            }
+        }else{
+          try {
+            io.emit('data-update', { temperature, humidity, brightness,  soil });
+          } catch (error) {
+            console.log(error)
           }
         }
-      })
+      }
       // Cập nhật trang web với dữ liệu mới
-
     }
   });
 
@@ -142,7 +140,7 @@ mongoose.connect(MONGODB_URI).then(result=>{
     // Lắng nghe sự kiện khi dữ liệu cần được cập nhật
     socket.on('get-latest-data', () => {
       // Truyền dữ liệu mới tới trình duyệt khi cần
-      io.emit('data-update', { temperature, humidity, door, pump, brightness});
+      io.emit('data-update', { temperature, humidity, brightness, soil});
     });
   });
   });

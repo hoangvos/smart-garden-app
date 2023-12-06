@@ -9,7 +9,10 @@ exports.maintheme = async(req, res) => {
   pump = list["Pump"]
   door = list["Door"]
   brightness = list["Brightness"]
-  res.render('iot', { temperature, humidity, pump, door, brightness,
+  soil = list['Soil']
+  Light = list["Light"]
+  
+  res.render('iot', { temperature, humidity, pump, door, brightness,Light,soil,
   pageTitle: "IOT Garden", isAuthenticated: req.session.isLoggedIn, csrfToken: req.csrfToken()});
 }
   

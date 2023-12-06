@@ -27,6 +27,7 @@
     "express-session": "^1.17.3",
     "firebase": "^8.10.0",
     "firebase-admin": "^11.11.0",
+    "moment-timezone": "^0.5.43",
     "mongoose": "^7.6.4",
     "mysql2": "^1.6.1",
     "pug": "^2.0.3",

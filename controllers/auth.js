@@ -140,50 +140,84 @@ exports.getHistoryDoor = (req, res, next)=>{
 
 
 exports.getChartTemp = async (req, res, next)=>{
-  const sensor = await sensors.find()
+  const sensor = await sensors.find().sort({createdAt: -1 }).limit(60)
   var list_temp = []
-  for(const item of sensor){
+  average_temp = 0
+  for(const item of sensor.reverse()){
     list_temp.push(item['temperature'])
+    average_temp+=item['temperature']
   }
+  average_temp/=60
+  average_temp =  average_temp.toFixed(1); 
   const snapshot = await User_data.get()
   var list = snapshot.data()
   temperature = list["Temperature"]
-  res.render('chart-temp', {temperature, list_temp,
+  res.render('chart-temp', {temperature, list_temp,average_temp,
   pageTitle:"Chart Temperature",
   isAuthenticated: req.session.isLoggedIn,
   csrfToken: req.csrfToken() 
   });
 }
 exports.getChartHumidity = async (req, res, next)=>{
-  const sensor = await sensors.find()
+  const sensor = await sensors.find().sort({createdAt: -1 }).limit(60)
   var list_humi = []
-  for(const item of sensor){
+  average_humi = 0
+  for(const item of sensor.reverse()){
     list_humi.push(item['humidity'])
+    average_humi+=item['humidity']
   }
+  average_humi/=60
+  average_humi =  average_humi.toFixed(1); 
   const snapshot = await User_data.get()
   var list = snapshot.data()
-  temperature = list["Temperature"]
-  res.render('chart-humidity', {temperature, list_humi,
-  pageTitle:"Chart Temperature",
+  humidity = list["Humidity"]
+  res.render('chart-humidity', {humidity, list_humi,average_humi,
+  pageTitle:"Chart Humidity",
   isAuthenticated: req.session.isLoggedIn,
   csrfToken: req.csrfToken() 
   });
 }
 exports.getChartBrightness = async (req, res, next)=>{
-  const sensor = await sensors.find()
+  const sensor = await sensors.find().sort({createdAt: -1 }).limit(60)
   var list_brightness = []
-  for(const item of sensor){
+  average_brightness = 0
+  for(const item of sensor.reverse()){
     list_brightness.push(item['brightness_level'])
+    average_brightness += item['brightness_level']
   }
+  average_brightness /= 60
+  average_brightness =  average_brightness.toFixed(1); 
   const snapshot = await User_data.get()
   var list = snapshot.data()
-  temperature = list["Temperature"]
-  res.render('chart-brightness', {temperature, list_brightness,
-  pageTitle:"Chart Temperature",
+  brightness_level = list["Brightness"]
+  res.render('chart-brightness', {brightness_level, list_brightness,
+  average_brightness,
+  pageTitle:"Chart Brightness",
   isAuthenticated: req.session.isLoggedIn,
   csrfToken: req.csrfToken() 
   });
 }
+
+exports.getChartSoilMoisture = async (req, res, next)=>{
+  const sensor = await sensors.find().sort({createdAt: -1 }).limit(60)
+  var list_soil_moisture = []
+  average_soil_moisture = 0
+  for(const item of sensor.reverse()){
+    list_soil_moisture.push(item['soil'])
+    average_soil_moisture+= item['soil']
+  }
+  average_soil_moisture/=60
+  average_soil_moisture =  average_soil_moisture.toFixed(1); 
+  const snapshot = await User_data.get()
+  var list = snapshot.data()
+  soil_moisture = list["Soil"]
+  res.render('chart-soil-moisture', {soil_moisture, list_soil_moisture,average_soil_moisture,
+  pageTitle:"Chart Soil Moisture",
+  isAuthenticated: req.session.isLoggedIn,
+  csrfToken: req.csrfToken() 
+  });
+}
+
 
 exports.getPumpShedule = async (req, res, next)=>{
   await time_schedule.find().then(schedules=>{
@@ -200,6 +234,8 @@ exports.getPumpShedule = async (req, res, next)=>{
     console.log(err)
   })
 }
+
+
 exports.postPumpShedule = async (req, res, next)=>{
   schedule = new time_schedule({
     hour: Number(req.body.time.split(':')[0]),

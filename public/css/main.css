@@ -15,7 +15,21 @@ body {
   background-repeat: no-repeat; 
   background-attachment: fixed;
 }
-
+.container {
+  min-height: 100%; 
+  max-height: 100%;
+  display: flex;
+  background-color: lightgray;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  padding: 20px;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column; /* Hiển thị nhiệt độ và độ ẩm theo chiều dọc */
+  align-items: center;
+}
 main {
   padding: 1rem;
   margin: auto;

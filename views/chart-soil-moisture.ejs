@@ -56,27 +56,27 @@
       }
     </style>
     <div class="data" style="max-height: 100% ; max-width: 100%;">
-      <div class="data-item"style="background-color:  rgb(217, 226, 140); display: flex;width: 70%; margin-top: 10px;">
-        <div class="icon-big icon-danger text-center" style="width: 100%; height: 150px;justify-content: center; align-items: center;">
-          <i class="fas fa-sun" style="font-size: 125px; padding-top: 10px; color: orange;"></i>
+      <div class="data-item"style="background-color:  #2f1e1e9c; display: flex;width: 70%; margin-top: 10px;">
+        <div class="icon-big icon-danger text-center" style="width: 100%; height: 70% ;justify-content: center; align-items: center;">
+            <img src="/image/11231980.png" style="width: 125px; padding-top: 10px; color: rgb(81, 27, 27)">
         </div>
         
         <div style="width: 100%">
-            <p class="data-label" style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; justify-content: center; align-items: center; padding-top: 25px;">Average brightness level over the past hour</p>
-            <p class="data-value" style="padding-top: 10px;"><span id="soil" style="padding-top: 40px; color: rgb(95, 102, 36);"><%= average_brightness %> Lux</span></p>
+            <p class="data-label" style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; justify-content: center; align-items: center; padding-top: 25px;">Average soil moisture over the past hour</p>
+            <p class="data-value" style="padding-top: 10px;"><span id="soil" style="padding-top: 40px; color: rgb(46, 13, 13);"><%= average_soil_moisture %> %</span></p>
         </div>
       </div>
       <div class="data_i" style="max-height: 100% ; max-width: 100%;display: flex; justify-content: space-between; width: 100%; gap: 10px;margin: 10px; margin-top: 0px;">
         <div class="container" style="margin-top: 10px;">
-          <div class="card-header" style="font-weight: bold;  color: rgb(221, 240, 53) ;margin-top: 20px; margin-bottom: 20px; font-size: 30px;
-          "> <p class="zzz"> Brightness level realtime chart </p></div>
+          <div class="card-header" style="font-weight: bold;  color: rgb(49, 4, 4) ;margin-top: 20px; margin-bottom: 20px; font-size: 30px;
+          "> <p class="zzz"> Soil moisture realtime chart </p></div>
               <canvas id="myChart" style="max-width: 100%; max-height: 100%;">
               </canvas>
         </div>
         <div class="container" style="margin-top: 10px;">
-          <div class="card-header" style="font-weight: bold;  color: rgb(221, 240, 53) ;
+          <div class="card-header" style="font-weight: bold;  color: rgb(49, 4, 4) ;
           margin-top: 20px; margin-bottom: 20px; font-size: 30px;
-          "> <p class="zzz">Brightness level chart for 1 hour</p> </div>
+          "> <p class="zzz">Soil moisture chart for 1 hour</p> </div>
           <canvas id="myChart_x" style="max-width: 100%; max-height: 100%;">
           </canvas>
         </div>
@@ -90,18 +90,18 @@
       ctx = document.getElementById('myChart').getContext("2d");
       let gradient = ctx.createLinearGradient(0,0,0,50);
       
-      gradient.addColorStop(0, 'rgb(221, 240, 53, 0.4)');
+      gradient.addColorStop(0, 'rgb(49, 4, 4,0.4)');
       var data = {
         labels : [0],
         datasets: [
           {
-            label:"Brightness level",
-            data: ['<%= JSON.stringify(brightness_level)%>'],
+            label:"Soil moisture",
+            data: ['<%= JSON.stringify(soil_moisture)%>'],
             borderColor:'rgb(221, 240, 53)',
             lineTension:0.5,
             fill:true,
             backgroundColor:gradient,
-            borderColor:"rgb(221, 240, 53)"
+            borderColor:"rgb(49, 4, 4)"
           }
         ]
       }
@@ -114,7 +114,7 @@
             y:{
               ticks:{
                 callback: function(value){
-                  return value + ' Lux';
+                  return value + ' %';
                 }
               }
             }
@@ -153,8 +153,8 @@
         dataRef.get().then(function(doc) {
         if (doc.exists) {
           // Tài liệu tồn tại, bạn có thể lấy giá trị trường "temp" bằng cách sử dụng doc.data()
-          var brightValue = doc.data().Brightness;
-          data.datasets[0].data.push(brightValue)
+          var soilValue = doc.data().Soil;
+          data.datasets[0].data.push(soilValue)
         } else {
           console.log("Tài liệu không tồn tại");
         }
@@ -167,12 +167,12 @@
       const data_x = {
         labels: labels,
         datasets: [{
-          label: 'Brightness level',
-          data: JSON.parse('<%= JSON.stringify(list_brightness) %>'),
+          label: 'Soil moisture',
+          data: JSON.parse('<%= JSON.stringify(list_soil_moisture) %>'),
           backgroundColor: 
-            'rgb(221, 240, 53, 0.3)',
+            'rgb(49, 4, 4, 0.3)',
           borderColor: 
-            'rgb(221, 240, 53)',
+            'rgb(49, 4, 4)',
              borderWidth: 1
         }]
       }
@@ -185,7 +185,7 @@
               beginAtZero: true,
               ticks:{
                 callback: function(value){
-                  return value + ' Lux';
+                  return value + ' %';
                 }
               }
             }

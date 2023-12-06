@@ -24,6 +24,7 @@ router.post('/pump-shedule-delete', isauth , authController.deletePumpShedule);
 router.get('/chart-temperature', isauth, authController.getChartTemp);
 router.get('/chart-humidity', isauth, authController.getChartHumidity);
 router.get('/chart-brightness', isauth, authController.getChartBrightness);
+router.get('/chart-soil-moisture', isauth, authController.getChartSoilMoisture);
 
 
 

@@ -12,6 +12,10 @@ const sensors = new Schema({
   brightness_level:{
     type:Number,
     require: true
+  },
+  soil: {
+    type:Number,
+    require: true
   }
-});
+}, {timestamps: true});
 module.exports = mongoose.model('sensors', sensors);
