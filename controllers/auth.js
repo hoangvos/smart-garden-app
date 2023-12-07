@@ -203,7 +203,42 @@ exports.getChartBrightness = async (req, res, next)=>{
   csrfToken: req.csrfToken() 
   });
 }
-
+exports.postChartBrightness = async (req, res, next)=>{
+  if(req.body.min != ""){
+    await User_data.update({
+      Lowest_brightness : Number(req.body.min)
+    })
+  }
+  if(req.body.max != ""){
+    await User_data.update({
+      Highest_brightness : Number(req.body.max)
+    })
+  }
+  const sensor = await sensors.find().sort({createdAt: -1 }).limit(60)
+  var list_brightness = []
+  average_brightness = 0
+  for(const item of sensor.reverse()){
+    list_brightness.push(item['brightness_level'])
+    average_brightness += item['brightness_level']
+  }
+  average_brightness /= 60
+  average_brightness =  average_brightness.toFixed(1); 
+  const snapshot = await User_data.get()
+  var list = snapshot.data()
+  brightness_level = list["Brightness"]
+  light_auto_mode = list["light_auto_mode"]
+  max_brightness = list["Highest_brightness"]
+  min_brightness = list["Lowest_brightness"]
+  res.render('chart-brightness', {brightness_level, list_brightness,
+  average_brightness,
+  light_auto_mode,
+  max_brightness,
+  min_brightness,
+  pageTitle:"Chart Brightness",
+  isAuthenticated: req.session.isLoggedIn,
+  csrfToken: req.csrfToken() 
+  });
+}
 exports.getChartSoilMoisture = async (req, res, next)=>{
   const sensor = await sensors.find().sort({createdAt: -1 }).limit(60)
   var list_soil_moisture = []
@@ -232,7 +267,7 @@ exports.postChartSoilMoisture = async (req, res,next)=>{
       Lowest_soil : Number(req.body.min)
     })
   }
-  if(req.body.min != ""){
+  if(req.body.max != ""){
     await User_data.update({
       Highest_soil : Number(req.body.max)
     })
