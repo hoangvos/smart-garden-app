@@ -75,6 +75,35 @@ mongoose.connect(MONGODB_URI).then(result=>{
     },
     2000
   )
+  setInterval(async ()=>{
+    const doc = await User.get() 
+    if(doc.data().soil_auto_mode){
+      if(doc.data().Soil > doc.data().Highest_soil){
+        await User.update({
+          Pump: false
+        })
+      }
+      if(doc.data().Soil <= doc.data().Lowest_soil){
+        await User.update({
+          Pump: true
+        })
+      }
+    }
+    if(doc.data().light_auto_mode){
+      if(doc.data().Brightness > doc.data().Highest_brightness){
+        await User.update({
+          Light: false
+        })
+      }
+      if(doc.data().Brightness <= doc.data().Lowest_brightness){
+        await User.update({
+          Light: true
+        })
+      }
+    }
+  }, 
+  1000
+  )
   //Lắng nghe sự kiện thay đổi trong Firebase
   User.onSnapshot(async(snapshot) => {
     snapshot = await User.get()

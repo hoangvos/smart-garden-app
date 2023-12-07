@@ -62,6 +62,12 @@ body {
   margin: 0;
   color: #444; /* Dark gray label text */
 }
+.data-labelx {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+  color: #444; /* Dark gray label text */
+}
 
 .data-value {
   font-size: 24px;

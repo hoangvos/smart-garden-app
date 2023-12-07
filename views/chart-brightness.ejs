@@ -81,9 +81,71 @@
           </canvas>
         </div>
       </div>
+      <div class="data-item"style="background-color: rgb(217, 226, 140); display: flex;width: 300px; margin-top: 10px; padding: 10px;
+      border-radius: 5px; border: 1px solid #ccc;"> 
+        <p class="data-labelx" style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; justify-content: center; align-items: center;">Automated Light Mode</p>
+        <div style="margin-left: 10px;">
+          <input class="mode-button" type="checkbox" data-toggle="toggle" data-onstyle="success" data-width="100" data-height="50">
+        </div>
+      </div>
+      <div class="data-item" id="data-item-form" style="background-color: white; display: flex;width: 90%; margin-top: 10px;
+      border-style: solid;
+      border-width: 4px;
+      border-color: rgb(49, 4, 4);
+      border-radius: 7px;
+      padding-left: 20px;
+      padding: 5px;
+      ">
+        <form class="soil-form" action="/chart-soil-moisture" method="POST"
+        style="display: flex; gap: 2em;">
+          <div class="soil-form">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="time-input-container" style="padding: 10px;
+            max-width: 100%;;"
+            >
+              <div style="margin-bottom: 10px;">
+                <label for="Intervals">The maximum allowable brightness level: </label>
+                <input style="padding: 7px; max-width: 100px;
+                margin-left: 25px;
+                border-width: 4px;
+                border-color: green;
+                border-radius: 7px;
+                padding-left: 20px;
+                " type="text" name="max" id="max" placeholder="<%= max_brightness %>">
+                <label style="margin-left: 20px;" for="Intervals">Lux</label>
+              </div>
+              <div style="margin-bottom: 10px;">
+                <label for="Intervals">The minimum allowable brightness level: </label>
+                <input style="padding: 7px; max-width: 100px;
+                margin-left: 25px;
+                border-width: 4px;
+                border-color: green;
+                border-radius: 7px;
+                padding-left: 20px;
+                " type="text" name="min" id="min" placeholder="<%= min_brightness %>"> 
+                <label style="margin-left: 20px;" for="Intervals">Lux</label>
+              </div>
+              <div>
+                <button type="submit" class="btn btn-success" id="moblie" style="max-height: 100%;">Update</button>
+              </div>
+          </div>
+          </div>
+        </form>
+      </div>
     </div>
   </body>
   <footer>
+    <script>
+      // JavaScript to programmatically set the state to 'off'
+      $(document).ready(function() {
+        if('<%= JSON.stringify(light_auto_mode)%>' == "false"){
+          $('input[type="checkbox"]').bootstrapToggle('off');
+        }
+        else{
+          $('input[type="checkbox"]').bootstrapToggle('on');
+        }
+      });
+    </script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script>
@@ -142,6 +204,20 @@
   
       // Sử dụng Firebase Firestore
       var db = firebase.firestore();
+      var mode_button = $(".mode-button");
+      mode_button.change(function() {
+          var isChecked = $(this).prop('checked');
+
+          // Assuming you are using Firebase Firestore
+          db.collection("User").doc("data").update({
+            light_auto_mode: isChecked
+          });
+          if (isChecked) {
+                $("#data-item-form").show();
+            } else {
+                $("#data-item-form").hide();
+          }
+      });
 
       window.setInterval(mycallback, 2000);
       function mycallback(){
