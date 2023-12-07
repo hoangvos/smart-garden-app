@@ -115,11 +115,6 @@ mongoose.connect(MONGODB_URI).then(result=>{
       const door = data["Door"]
       const brightness = data["Brightness"]
       const soil = data['Soil']
-      const Sensors = new sensors({
-        temperature:temperature,
-        humidity:humidity,
-        brightness_level:brightness
-      }) 
       const last_access_door = await hist_door.find().sort({createdAt:-1}).limit(1)
       if(!last_access_door) {
         const access_door = new hist_door({
