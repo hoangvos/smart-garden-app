@@ -48,43 +48,38 @@ mongoose.connect(MONGODB_URI).then(result=>{
   const server = app.listen(3000, () => {
   console.log(`Server is running on port 3000`);
   const io = require('socket.io')(server);
-  setInterval(
-    async ()=>{
-      const currentDate = moment();
-      await schedule_time.find().then(
-        async (result)=>{
-          for (items of  result){
-            const currentDate = moment();
-            const currentHour = currentDate.hour();
-            const currentMinute = currentDate.minute();
-            if(items['hour'] == currentHour && items['minute'] ==currentMinute){
-              if(items['check']){
-                User.update({
-                  'Pump': true
-                })
-                await schedule_time.findByIdAndUpdate(items['_id'], {'check' : false})
-              }
+  setInterval(async () => {
+    const currentDate = moment();
+    const result = await schedule_time.find();
+
+    for (let items of result) {
+        const currentHour = currentDate.hour();
+        const currentMinute = currentDate.minute();
+
+        if (items['hour'] == currentHour && items['minute'] == currentMinute) {
+            if (items['check']) {
+                await User.updateOne({ 'Pump': true });
+                await schedule_time.findByIdAndUpdate(items['_id'], { 'check': false });
             }
-            data = await User.get()
-            if(data['Pump'] == false && items['check'] == false){
-              await schedule_time.findByIdAndUpdate(items['_id'], {'process' : false})
-            }
-            const hour_end = (items['hour'] + Math.floor((items['minute'] + items['intervals'])/60))%24 
-            const minute_end = (items['minute'] + items['intervals'])%60
-            if(hour_end == currentHour && minute_end ==currentMinute){
-              if(item['process']){
-                User.update({
-                  'Pump': false
-                })
-                await schedule_time.findByIdAndUpdate(items['_id'], {'check' : true, 'process' :true})
-              }
-            }
-          }
         }
-      )
-    },
-    2000
-  )
+
+        const data = await User.get(); // Assuming User.get() returns a Promise
+        if (data['Pump'] == false && items['check'] == false) {
+            await schedule_time.findByIdAndUpdate(items['_id'], { 'process': false });
+        }
+
+        const hour_end = (items['hour'] + Math.floor((items['minute'] + items['intervals']) / 60)) % 24;
+        const minute_end = (items['minute'] + items['intervals']) % 60;
+
+        if (hour_end == currentHour && minute_end == currentMinute) {
+            if (items['process']) {
+                await User.updateOne({ 'Pump': false });
+                await schedule_time.findByIdAndUpdate(items['_id'], { 'check': true, 'process': true });
+            }
+        }
+    }
+  }, 2000);
+
   setInterval(async ()=>{
     const doc = await User.get() 
     if(doc.data().soil_auto_mode){
