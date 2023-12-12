@@ -58,11 +58,11 @@ mongoose.connect(MONGODB_URI).then(result=>{
 
         if (items['hour'] == currentHour && items['minute'] == currentMinute) {
             if (items['check']) {
-                await User.update({ 'Pump': true });
+                User.update({ 'Pump': true });
                 await schedule_time.findByIdAndUpdate(items['_id'], { 'check': false });
             }
         }
-        if (!data['Pump'] && !items['check']) {
+        if (!data.data().Pump && !items['check']) {
           await schedule_time.findByIdAndUpdate(items['_id'], { 'process': false });
         }
         const hour_end = (items['hour'] + Math.floor((items['minute'] + items['intervals']) / 60)) % 24;
@@ -70,7 +70,7 @@ mongoose.connect(MONGODB_URI).then(result=>{
 
         if (hour_end == currentHour && minute_end == currentMinute && !items['check']) {
             if (items['process']) {
-              await User.update({ 'Pump': false });
+              User.update({ 'Pump': false });
               await schedule_time.findByIdAndUpdate(items['_id'], { 'check': true, 'process': true });
             }
             else{
