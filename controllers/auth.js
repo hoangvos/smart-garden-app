@@ -317,7 +317,9 @@ exports.postPumpShedule = async (req, res, next)=>{
   schedule = new time_schedule({
     hour: Number(req.body.time.split(':')[0]),
     minute: Number(req.body.time.split(':')[1]),
-    intervals: Number(req.body.intervals)
+    intervals: Number(req.body.intervals),
+    check: true,
+    process: true
   })
   return schedule.save().then(async result=>{
     await time_schedule.find().then(schedules=>{

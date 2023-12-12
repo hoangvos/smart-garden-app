@@ -58,16 +58,26 @@ mongoose.connect(MONGODB_URI).then(result=>{
             const currentHour = currentDate.hour();
             const currentMinute = currentDate.minute();
             if(items['hour'] == currentHour && items['minute'] ==currentMinute){
-              User.update({
-                'Pump': true
-              })
+              if(items['check']){
+                await User.update({
+                  'Pump': true
+                })
+                await schedule_time.findByIdAndUpdate(items['_id'], {'check' : false})
+              }
+            }
+            data = await db.collection("User").doc("data").get()
+            if(data['Pump'] == false && items['check'] == false){
+              await schedule_time.findByIdAndUpdate(items['_id'], {'process' : false})
             }
             const hour_end = (items['hour'] + Math.floor((items['minute'] + items['intervals'])/60))%24 
             const minute_end = (items['minute'] + items['intervals'])%60
             if(hour_end == currentHour && minute_end ==currentMinute){
-              User.update({
-                'Pump': false
-              })
+              if(item['process']){
+                await User.update({
+                  'Pump': false
+                })
+                await schedule_time.findByIdAndUpdate(items['_id'], {'check' : true, 'process' :true})
+              }
             }
           }
         }

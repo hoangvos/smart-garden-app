@@ -12,6 +12,14 @@ const time_schedule = new Schema({
   intervals:{
     type: Number,
     require: true
+  },
+  check:{
+    type: Boolean,
+    require:true
+  },
+  process:{
+    type: Boolean, 
+    require: true
   }
 });
 module.exports = mongoose.model('time_schedule', time_schedule);
