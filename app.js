@@ -59,7 +59,7 @@ mongoose.connect(MONGODB_URI).then(result=>{
             const currentMinute = currentDate.minute();
             if(items['hour'] == currentHour && items['minute'] ==currentMinute){
               if(items['check']){
-                await User.update({
+                User.update({
                   'Pump': true
                 })
                 await schedule_time.findByIdAndUpdate(items['_id'], {'check' : false})
@@ -73,7 +73,7 @@ mongoose.connect(MONGODB_URI).then(result=>{
             const minute_end = (items['minute'] + items['intervals'])%60
             if(hour_end == currentHour && minute_end ==currentMinute){
               if(item['process']){
-                await User.update({
+                User.update({
                   'Pump': false
                 })
                 await schedule_time.findByIdAndUpdate(items['_id'], {'check' : true, 'process' :true})
