@@ -71,7 +71,7 @@ mongoose.connect(MONGODB_URI).then(result=>{
         const hour_end = (items['hour'] + Math.floor((items['minute'] + items['intervals']) / 60)) % 24;
         const minute_end = (items['minute'] + items['intervals']) % 60;
 
-        if (hour_end == currentHour && minute_end == currentMinute) {
+        if (hour_end == currentHour && minute_end == currentMinute && !items['check']) {
             if (items['process']) {
               User.update({ 'Pump': false });
               await schedule_time.findByIdAndUpdate(items['_id'], { 'check': true, 'process': true });
