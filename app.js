@@ -58,13 +58,13 @@ mongoose.connect(MONGODB_URI).then(result=>{
 
         if (items['hour'] == currentHour && items['minute'] == currentMinute) {
             if (items['check']) {
-                User.update({ 'Pump': true });
+                await User.update({ 'Pump': true });
                 await schedule_time.findByIdAndUpdate(items['_id'], { 'check': false });
             }
         }
 
         const data = await User.get(); // Assuming User.get() returns a Promise
-        if (!data['Pump']&& !items['check']) {
+        if (!data['Pump'] && !items['check']) {
             await schedule_time.findByIdAndUpdate(items['_id'], { 'process': false });
         }
 
@@ -73,7 +73,7 @@ mongoose.connect(MONGODB_URI).then(result=>{
 
         if (hour_end == currentHour && minute_end == currentMinute && !items['check']) {
             if (items['process']) {
-              User.update({ 'Pump': false });
+              await User.update({ 'Pump': false });
               await schedule_time.findByIdAndUpdate(items['_id'], { 'check': true, 'process': true });
             }
             else{
