@@ -12,14 +12,6 @@ const userSchema = new Schema({
   password:{
     type: String,
     required: true
-  },
-  check:{
-    type: Boolean,
-    required: true
-  },
-  process:{
-    type: Boolean,
-    required: true
   }
 });
 module.exports = mongoose.model('User', userSchema);
