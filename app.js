@@ -51,7 +51,7 @@ mongoose.connect(MONGODB_URI).then(result=>{
   setInterval(async () => {
     const currentDate = moment();
     const result = await schedule_time.find();
-
+    const data = await User.get(); 
     for (let items of result) {
         const currentHour = currentDate.hour();
         const currentMinute = currentDate.minute();
@@ -62,12 +62,9 @@ mongoose.connect(MONGODB_URI).then(result=>{
                 await schedule_time.findByIdAndUpdate(items['_id'], { 'check': false });
             }
         }
-
-        const data = await User.get(); // Assuming User.get() returns a Promise
         if (!data['Pump'] && !items['check']) {
-            await schedule_time.findByIdAndUpdate(items['_id'], { 'process': false });
+          await schedule_time.findByIdAndUpdate(items['_id'], { 'process': false });
         }
-
         const hour_end = (items['hour'] + Math.floor((items['minute'] + items['intervals']) / 60)) % 24;
         const minute_end = (items['minute'] + items['intervals']) % 60;
 
