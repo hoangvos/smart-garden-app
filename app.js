@@ -58,7 +58,7 @@ mongoose.connect(MONGODB_URI).then(result=>{
 
         if (items['hour'] == currentHour && items['minute'] == currentMinute) {
             if (items['check']) {
-                await User.updateOne({ 'Pump': true });
+                User.update({ 'Pump': true });
                 await schedule_time.findByIdAndUpdate(items['_id'], { 'check': false });
             }
         }
@@ -73,7 +73,7 @@ mongoose.connect(MONGODB_URI).then(result=>{
 
         if (hour_end == currentHour && minute_end == currentMinute) {
             if (items['process']) {
-              await User.updateOne({ 'Pump': false });
+              User.update({ 'Pump': true });
               await schedule_time.findByIdAndUpdate(items['_id'], { 'check': true, 'process': true });
             }
             else{
