@@ -65,7 +65,7 @@ mongoose.connect(MONGODB_URI).then(result=>{
                 await schedule_time.findByIdAndUpdate(items['_id'], {'check' : false})
               }
             }
-            data = await db.collection("User").doc("data").get()
+            data = await User.get()
             if(data['Pump'] == false && items['check'] == false){
               await schedule_time.findByIdAndUpdate(items['_id'], {'process' : false})
             }
