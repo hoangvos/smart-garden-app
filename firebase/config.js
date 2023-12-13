@@ -11,5 +11,5 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig)
 const db = firebase.firestore()
-const User = db.collection('User').doc('data')
+const User = db.collection('User')
 module.exports = User 

@@ -176,7 +176,7 @@
         
 
         // Cập nhật dữ liệu trạng thái checkbox trong Firestore
-        db.collection("User").doc("data").update({
+        db.collection("User").doc("Pump").update({
             Pump: isChecked
         });
     });
@@ -185,7 +185,7 @@
         
         var isChecked = door_toggle.checked;
         // Cập nhật dữ liệu trạng thái checkbox trong Firestore
-        db.collection("User").doc("data").update({
+        db.collection("User").doc("Door").update({
             Door: isChecked
         });
     });
@@ -193,7 +193,7 @@
         
         var isChecked = led_toggle.checked;
         // Cập nhật dữ liệu trạng thái checkbox trong Firestore
-        db.collection("User").doc("data").update({
+        db.collection("User").doc("Light").update({
             Light: isChecked
         });
     });
@@ -233,21 +233,32 @@
     <script>
         const socket = io();
         socket.on('data-update',async ({ temperature, humidity, brightness, soil}) => {
-            const docRef = db.collection("User").doc("data");
-            const doc = await docRef.get();
-            if(doc.data().Pump != document.getElementById("pump-toggle").checked){
-                document.getElementById("pump-toggle").checked = doc.data().Pump
-            }
-            if(doc.data().Door != document.getElementById("door-toggle").checked ){
-                document.getElementById("door-toggle").checked = doc.data().Door
-            }
-            if(doc.data().Light != document.getElementById("led-toggle").checked ){
-                document.getElementById("led-toggle").checked = doc.data().Light
-            }
             document.getElementById('temperature').textContent = `${temperature}°C`;
             document.getElementById('humidity').textContent = `${humidity}%`;
             document.getElementById('brightness').textContent = `${brightness} Lux`;
             document.getElementById('soil').textContent = `${soil}%`;
         });
+        socket.on('data-door-update',async () => {
+            const docRef = db.collection("User").doc("Door");
+            const doc = await docRef.get();
+            if(doc.data().Door != document.getElementById("door-toggle").checked ){
+                document.getElementById("door-toggle").checked = doc.data().Door
+            }
+        });
+        socket.on('data-pump-update',async () => {
+            const docRef = db.collection("User").doc("Pump");
+            const doc = await docRef.get();
+            if(doc.data().Pump != document.getElementById("pump-toggle").checked){
+                document.getElementById("pump-toggle").checked = doc.data().Pump
+            }
+        });
+        socket.on('data-light-update',async () => {
+            const docRef = db.collection("User").doc("Light");
+            const doc = await docRef.get();
+            if(doc.data().Light != document.getElementById("led-toggle").checked ){
+                document.getElementById("led-toggle").checked = doc.data().Light
+            }
+        });
+
     </script>
 <%- include('includes/end.ejs') %>

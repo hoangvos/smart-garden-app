@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs')
 const User = require('../models/user')
-const User_data = require('../firebase/config.js');
+const User_data = require('../firebase/config.js').doc('data');
 const hist_door = require('../models/door.js')
 
 const Access = require('../models/access')
